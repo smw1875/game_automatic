@@ -1,0 +1,8 @@
+
+FUNCTION Log GLOBAL
+    # 흐름 실행 중 오류가 발생 시 Log 흐름에서 로그 기록 후 흐름을 종료합니다.
+    CALL Init
+    @@flowname: 'Logging'
+External.RunFlow FlowId: '9c54e46f-9536-40c7-9556-658480e079ba' @File_Path: $'''%User_Path%\\Risemara\\Mecro.txt''' @Logging_Text: Log_Error
+    EXIT Code: 0
+END FUNCTION

@@ -1,0 +1,26 @@
+
+FUNCTION Setting GLOBAL
+    /# 매크로 실행에 필요한 값을 설정합니다.
+아이디, 비밀번호의 경우 암호화 후 파일에 입력하고, 복호화하여 변수에 담습니다.#/
+    BLOCK Setting_Fail
+ON BLOCK ERROR
+    SET Log_Error TO $'''세팅에 실패하였습니다.'''
+    CALL Log
+    THROW ERROR
+END
+        MouseAndKeyboard.SendKeys.FocusAndSendKeys TextToSend: $'''{LWin}({D})''' DelayBetweenKeystrokes: 10 SendTextAsHardwareKeys: False
+        @@flowname: 'Get_User_Path'
+External.RunFlow FlowId: 'b8c26724-daa8-ed11-aad0-000d3a08860c' @User_Path=> User_Path
+        SET Repetition_Num TO 1
+        IF (File.IfFile.DoesNotExist File: $'''%User_Path%\\Risemara\\Id.txt''') THEN
+            Cryptography.EncryptText.EncryptTextWithAES Encoding: Cryptography.EncryptionEncoding.Unicode TextToEncrypt: $'''smw_test''' EncryptionKey: P'AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5sYbHnnbsEi8oKgxo3CEoAQAAAACAAAAAAAQZgAAAAEAACAAAAADpybQwSiUyu7fDZRDgBlTi4dSnV4WB3F1CCBNsYdhJwAAAAAOgAAAAAIAACAAAABWdLm49R6rCO2BRYAAF/pb/ujuEHSe3FhjQmnniBWgXhAAAABi66xjZpqvjMlsgOlu0xx0QAAAAHvSIMOvuUrQHDgf1jWsczY4nyV7Y2WfF2dl5mIzuGH1ai2SlXQXwsu1ytzJjKaHgnmKmD1MylJnGKTlL9vigG0=' PaddingMode: Cryptography.PaddingMode.PKCS7 KeySize: Cryptography.AESKeySize.Bits256 EncryptedText=> Encryption_Id
+            Cryptography.EncryptText.EncryptTextWithAES Encoding: Cryptography.EncryptionEncoding.Unicode TextToEncrypt: $'''auddnjs12!''' EncryptionKey: P'AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5sYbHnnbsEi8oKgxo3CEoAQAAAACAAAAAAAQZgAAAAEAACAAAAADpybQwSiUyu7fDZRDgBlTi4dSnV4WB3F1CCBNsYdhJwAAAAAOgAAAAAIAACAAAABWdLm49R6rCO2BRYAAF/pb/ujuEHSe3FhjQmnniBWgXhAAAABi66xjZpqvjMlsgOlu0xx0QAAAAHvSIMOvuUrQHDgf1jWsczY4nyV7Y2WfF2dl5mIzuGH1ai2SlXQXwsu1ytzJjKaHgnmKmD1MylJnGKTlL9vigG0=' PaddingMode: Cryptography.PaddingMode.PKCS7 KeySize: Cryptography.AESKeySize.Bits256 EncryptedText=> Encryption_Pw
+            File.WriteText File: $'''%User_Path%\\Risemara\\Id.txt''' TextToWrite: Encryption_Id AppendNewLine: True IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+            File.WriteText File: $'''%User_Path%\\Risemara\\Pw.txt''' TextToWrite: Encryption_Pw AppendNewLine: True IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        END
+        File.ReadTextFromFile.ReadText File: $'''%User_Path%\\Risemara\\Id.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> Encryption_Id
+        File.ReadTextFromFile.ReadText File: $'''%User_Path%\\Risemara\\Pw.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> Encryption_Pw
+        Cryptography.DecryptText.DecryptTextWithAES Encoding: Cryptography.EncryptionEncoding.Unicode TextToDecrypt: Encryption_Id DecryptionKey: P'AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5sYbHnnbsEi8oKgxo3CEoAQAAAACAAAAAAAQZgAAAAEAACAAAADU8Y8jrA3OxTBbzDUWPuPLjvSz8m2WeWbijpV1pOMjKQAAAAAOgAAAAAIAACAAAADRxglJ8H+t+nPrWGUXcIaSZtC5BIT1c2IUebN77rVy3xAAAAAhvOrL2h6tHYj0rQ69X6v+QAAAAFwLUCbPatneJF2Qyjjtux9qIcl3ULWMBIgXQwZQ89ZUH+fGy8prPBskQLf7kaEK+EEeroZj+Sw50amjFaTeJzg=' Padding: Cryptography.PaddingMode.PKCS7 KeySize: Cryptography.AESKeySize.Bits256 DecryptedText=> Steam_Id
+        Cryptography.DecryptText.DecryptTextWithAES Encoding: Cryptography.EncryptionEncoding.Unicode TextToDecrypt: Encryption_Pw DecryptionKey: P'AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5sYbHnnbsEi8oKgxo3CEoAQAAAACAAAAAAAQZgAAAAEAACAAAADU8Y8jrA3OxTBbzDUWPuPLjvSz8m2WeWbijpV1pOMjKQAAAAAOgAAAAAIAACAAAADRxglJ8H+t+nPrWGUXcIaSZtC5BIT1c2IUebN77rVy3xAAAAAhvOrL2h6tHYj0rQ69X6v+QAAAAFwLUCbPatneJF2Qyjjtux9qIcl3ULWMBIgXQwZQ89ZUH+fGy8prPBskQLf7kaEK+EEeroZj+Sw50amjFaTeJzg=' Padding: Cryptography.PaddingMode.PKCS7 KeySize: Cryptography.AESKeySize.Bits256 DecryptedText=> Steam_Pw
+    END
+END FUNCTION
